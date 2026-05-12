@@ -8,20 +8,18 @@
 <meta name="robots" content="noindex,nofollow" />
 <link rel="stylesheet" href="./assets/css/site.css" />
 <script>
-  // Language routing — runs before picker UI renders to avoid flash.
-  // Priority: ?picker=1 (explicit) → saved choice → default to Swedish.
+  // One-shot language picker: if a language was previously chosen, jump there.
+  // EXCEPT when ?picker=1 is in the URL — that's the "Change language" entry point.
+  // First-time visitors see the picker (now anchored to the top of the viewport
+  // so it's immediately visible inside the SharePoint iframe).
   (function () {
     try {
       var params = new URLSearchParams(location.search);
-      if (params.get('picker') === '1') return; // honor explicit picker request
+      if (params.get('picker') === '1') return;
       var lang = localStorage.getItem('upn-hub-lang');
       if (lang === 'en' || lang === 'sv' || lang === 'no') {
         location.replace('./' + lang + '/');
-        return;
       }
-      // First-time visitor — default to Swedish (majority audience).
-      // Norwegian + English users switch via the in-page language toggle.
-      location.replace('./sv/');
     } catch (e) { /* localStorage blocked — show picker */ }
   })();
 </script>
@@ -30,13 +28,13 @@
   body.picker {
     min-height: 100vh;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
     background:
       radial-gradient(circle at 100% 0%, rgba(57, 207, 186, 0.18), transparent 55%),
       radial-gradient(circle at 0% 100%, rgba(3, 163, 244, 0.12), transparent 55%),
       var(--blue-100);
-    padding: 24px;
+    padding: 32px 24px;
   }
   .picker-card {
     background: white;
