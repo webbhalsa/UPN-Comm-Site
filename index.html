@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Your login is changing — UPN Migration Hub | Kry/Livi</title>
+<style>
+  :root {
+    --blue-900: #002845;
+    --blue-500: #03A3F4;
+    --blue-100: #E6FBFF;
+    --primary-500: #39CFBA;
+    --primary-100: #EEFAF7;
+    --pink-500: #FE6F89;
+    --orange-500: #FF9732;
+    --orange-100: #FFE9C8;
+    --yellow-100: #FFFAD0;
+    --yellow-500: #FBD100;
+
+    --text: #002845;
+    --text-muted: #4a6577;
+    --bg: #ffffff;
+    --bg-soft: #f7fbfd;
+    --border: #d9e5ec;
+
+    --radius-sm: 8px;
+    --radius-md: 14px;
+    --radius-lg: 22px;
+    --shadow-sm: 0 1px 2px rgba(0, 40, 69, 0.06), 0 2px 6px rgba(0, 40, 69, 0.04);
+    --shadow-md: 0 4px 10px rgba(0, 40, 69, 0.08), 0 10px 30px rgba(0, 40, 69, 0.06);
+
+    --font-display: "Inter Tight", "Segoe UI", system-ui, sans-serif;
+    --font-body: "Inter", "Segoe UI", system-ui, sans-serif;
+  }
+
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    padding: 0;
+    font-family: var(--font-body);
+    color: var(--text);
+    background: var(--bg);
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--blue-900);
+    margin: 0 0 0.6em;
+  }
+
+  h1 { font-size: clamp(2rem, 3.6vw, 3rem); line-height: 1.1; letter-spacing: -0.02em; }
+  h2 { font-size: 1.55rem; line-height: 1.2; margin-top: 0; }
+  h3 { font-size: 1.15rem; }
+
+  p { margin: 0 0 1em; }
+
+  a { color: var(--blue-500); text-decoration: none; font-weight: 500; }
+  a:hover { text-decoration: underline; }
+
+  .page-wrap {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 32px 24px 80px;
+  }
+
+  /* HERO */
+  .hero {
+    padding: 44px 44px 40px;
+    border-radius: var(--radius-lg);
+    background:
+      radial-gradient(circle at 100% 0%, rgba(57, 207, 186, 0.18), transparent 55%),
+      radial-gradient(circle at 0% 100%, rgba(3, 163, 244, 0.12), transparent 55%),
+      var(--blue-100);
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 40px; align-items: center; }
+  @media (max-width: 820px) { .hero-grid { grid-template-columns: 1fr; } .hero { padding: 32px 24px; } }
+
+  .eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 0.78rem; font-weight: 600;
+    color: var(--blue-900);
+    background: white;
+    padding: 6px 12px; border-radius: 999px;
+    margin-bottom: 18px;
+    border: 1px solid rgba(0, 40, 69, 0.1);
+  }
+  .eyebrow::before {
+    content: ""; width: 8px; height: 8px;
+    background: var(--primary-500); border-radius: 50%;
+    display: inline-block;
+    box-shadow: 0 0 0 4px rgba(57, 207, 186, 0.25);
+  }
+
+  .hero p.lead {
+    font-size: 1.1rem; color: var(--text-muted); max-width: 540px;
+  }
+
+  .hero-key {
+    background: white;
+    padding: 22px 24px;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-md);
+    border-left: 4px solid var(--primary-500);
+  }
+  .hero-key .label-row {
+    font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.08em;
+    color: var(--text-muted); font-weight: 600; margin-bottom: 8px;
+  }
+  .hero-key .upn-line {
+    font-family: "JetBrains Mono", "SF Mono", Consolas, monospace;
+    font-size: 0.95rem;
+    word-break: break-all;
+    margin: 8px 0;
+  }
+  .hero-key .upn-line.old {
+    color: var(--text-muted);
+    text-decoration: line-through;
+    text-decoration-color: var(--pink-500);
+    text-decoration-thickness: 2px;
+  }
+  .hero-key .upn-line.new {
+    color: var(--blue-900);
+    font-weight: 600;
+  }
+  .hero-key .arrow { color: var(--primary-500); font-weight: 700; margin: 4px 0; }
+  .hero-key .pwd-note {
+    font-size: 0.85rem; color: var(--text-muted); margin: 12px 0 0;
+  }
+
+  /* COUNTRY CARDS */
+  .status-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-top: 36px;
+  }
+  @media (max-width: 720px) { .status-row { grid-template-columns: 1fr; } }
+
+  .country-card {
+    padding: 22px 24px;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border);
+    background: white;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    position: relative;
+  }
+  .country-card .flag-row {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 4px;
+  }
+  .country-card .flag { font-size: 1.4rem; }
+  .country-card .country-name {
+    font-weight: 600; color: var(--blue-900);
+  }
+  .country-card .status-pill {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 0.75rem; font-weight: 600;
+    padding: 4px 10px; border-radius: 999px;
+    background: var(--orange-100); color: #a05a00;
+    width: fit-content;
+    margin-top: 4px;
+  }
+  .country-card.complete .status-pill {
+    background: var(--primary-100); color: #0a8870;
+  }
+  .country-card .date-line {
+    font-size: 1.4rem; font-weight: 600; color: var(--blue-900);
+    font-family: var(--font-display);
+    margin-top: 6px;
+  }
+  .country-card .meta-line {
+    font-size: 0.88rem; color: var(--text-muted);
+  }
+
+  /* SECTIONS */
+  section { margin-top: 56px; }
+  .section-head { margin-bottom: 24px; }
+  .section-head .num {
+    font-size: 0.78rem; font-weight: 700;
+    color: var(--primary-500);
+    letter-spacing: 0.1em;
+    margin-bottom: 6px;
+  }
+  .section-head h2 { margin-bottom: 4px; }
+  .section-head .sub { color: var(--text-muted); }
+
+  /* ACTION STEPS */
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+  @media (max-width: 820px) { .steps { grid-template-columns: 1fr; } }
+
+  .step {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 24px;
+    position: relative;
+  }
+  .step .step-num {
+    width: 36px; height: 36px;
+    background: var(--blue-900); color: white;
+    border-radius: 50%;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-weight: 600; font-family: var(--font-display);
+    margin-bottom: 14px;
+  }
+  .step h3 { margin-bottom: 8px; }
+  .step ul { padding-left: 18px; margin: 0; color: var(--text-muted); font-size: 0.93rem; }
+  .step ul li { margin-bottom: 6px; }
+  .step .screenshot-placeholder {
+    margin-top: 14px;
+    height: 110px;
+    background: var(--bg-soft);
+    border: 1px dashed var(--border);
+    border-radius: var(--radius-sm);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    font-style: italic;
+  }
+
+  /* APP IMPACT */
+  .impact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  @media (max-width: 720px) { .impact-grid { grid-template-columns: 1fr; } }
+
+  .impact-card {
+    padding: 22px;
+    border-radius: var(--radius-md);
+    background: white;
+    border: 1px solid var(--border);
+  }
+  .impact-card.good { border-left: 4px solid var(--primary-500); }
+  .impact-card.warn { border-left: 4px solid var(--orange-500); }
+  .impact-card h3 {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 12px;
+  }
+  .impact-icon {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 0.95rem;
+  }
+  .good .impact-icon { background: var(--primary-100); color: #0a8870; }
+  .warn .impact-icon { background: var(--orange-100); color: #a05a00; }
+  .impact-card ul { padding-left: 20px; color: var(--text-muted); margin: 0; }
+  .impact-card ul li { margin-bottom: 6px; }
+  .impact-card ul li strong { color: var(--blue-900); font-weight: 600; }
+
+  /* FAQ */
+  .faq-list { display: flex; flex-direction: column; gap: 10px; }
+  details.faq-item {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    transition: box-shadow 0.2s;
+  }
+  details.faq-item[open] {
+    box-shadow: var(--shadow-sm);
+    border-color: var(--primary-500);
+  }
+  details.faq-item summary {
+    padding: 16px 22px;
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--blue-900);
+    list-style: none;
+    display: flex; justify-content: space-between; align-items: center;
+    gap: 16px;
+  }
+  details.faq-item summary::-webkit-details-marker { display: none; }
+  details.faq-item summary::after {
+    content: "+";
+    font-size: 1.3rem;
+    color: var(--primary-500);
+    transition: transform 0.2s;
+    line-height: 1;
+  }
+  details.faq-item[open] summary::after { content: "−"; }
+  details.faq-item .faq-body {
+    padding: 0 22px 18px;
+    color: var(--text-muted);
+  }
+
+  /* SUPPORT */
+  .support-banner {
+    background: linear-gradient(135deg, var(--blue-900), #003a64);
+    color: white;
+    border-radius: var(--radius-lg);
+    padding: 36px 40px;
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 30px;
+    align-items: center;
+  }
+  @media (max-width: 720px) { .support-banner { grid-template-columns: 1fr; padding: 28px 24px; } }
+  .support-banner h2 { color: white; margin: 0 0 8px; }
+  .support-banner p { color: rgba(255, 255, 255, 0.85); margin: 0; }
+  .support-cta {
+    display: flex; flex-direction: column; gap: 10px;
+  }
+  .support-cta a.btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+    padding: 14px 22px;
+    background: var(--primary-500);
+    color: var(--blue-900);
+    border-radius: 999px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: transform 0.15s;
+  }
+  .support-cta a.btn:hover { transform: translateY(-1px); text-decoration: none; }
+  .support-cta a.btn-outline {
+    background: transparent;
+    color: white;
+    border: 1.5px solid rgba(255, 255, 255, 0.4);
+  }
+
+  /* FOOTER */
+  footer {
+    margin-top: 60px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px;
+  }
+</style>
+</head>
+<body>
+
+<div class="page-wrap">
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="hero-grid">
+      <div>
+        <div class="eyebrow">Active project · ITA-1779</div>
+        <h1>Your login username is changing</h1>
+        <p class="lead">
+          We're simplifying how you log in to your Kry/Livi computer. Your username is moving from
+          <code>@ad.kry.se</code> to <code>@kry.se</code>. There's a small action you'll need to take the first time you log in after the change.
+        </p>
+      </div>
+      <div class="hero-key">
+        <div class="label-row">Your new login</div>
+        <div class="upn-line old">firstname.lastname@ad.kry.se</div>
+        <div class="arrow">→</div>
+        <div class="upn-line new">firstname.lastname@kry.se</div>
+        <p class="pwd-note">Your password stays exactly the same.</p>
+      </div>
+    </div>
+  </header>
+
+  <!-- TIMELINE -->
+  <section>
+    <div class="section-head">
+      <div class="num">01 / TIMELINE</div>
+      <h2>When does this happen for me?</h2>
+      <p class="sub">The rollout happens in two waves, by country. The change is applied overnight, on a Sunday, so you'll notice it the following Monday.</p>
+    </div>
+
+    <div class="status-row">
+      <div class="country-card">
+        <div class="flag-row">
+          <span class="flag">🇳🇴</span>
+          <span class="country-name">Norway</span>
+        </div>
+        <span class="status-pill">⏳ Upcoming</span>
+        <div class="date-line">Sunday 25 May 2026</div>
+        <div class="meta-line">~39 HCPs · BA Norway Clinicians Remote</div>
+      </div>
+      <div class="country-card">
+        <div class="flag-row">
+          <span class="flag">🇸🇪</span>
+          <span class="country-name">Sweden</span>
+        </div>
+        <span class="status-pill">⏳ Upcoming</span>
+        <div class="date-line">Sunday 1 June 2026</div>
+        <div class="meta-line">~800+ HCPs · 40+ clinic locations</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ACTION STEPS -->
+  <section>
+    <div class="section-head">
+      <div class="num">02 / WHAT YOU NEED TO DO</div>
+      <h2>First login after the change — three steps</h2>
+      <p class="sub">Important: on your first login after the change date, you must use <strong>"Other user"</strong> on the Windows login screen — don't just tap your existing profile.</p>
+    </div>
+
+    <div class="steps">
+
+      <div class="step">
+        <div class="step-num">1</div>
+        <h3>Confirm the change</h3>
+        <ul>
+          <li>Check you've received the IT confirmation email that your username has been updated.</li>
+          <li>Your new username will be firstname.lastname@kry.se</li>
+        </ul>
+      </div>
+
+      <div class="step">
+        <div class="step-num">2</div>
+        <h3>Sign out of your computer</h3>
+        <ul>
+          <li>Click the <strong>Windows (Start)</strong> button.</li>
+          <li>Click your <strong>profile name / icon</strong>.</li>
+          <li>Select <strong>"Sign out"</strong>.</li>
+        </ul>
+        <div class="screenshot-placeholder">[ Screenshot: Start menu → Sign out ]</div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">3</div>
+        <h3>Sign in with your new username</h3>
+        <ul>
+          <li>On the login screen, look at the <strong>bottom-left</strong>.</li>
+          <li>Click <strong>"Other user"</strong>.</li>
+          <li>Enter your <strong>new username</strong> (firstname.lastname@kry.se).</li>
+          <li>Enter your <strong>existing password</strong> and press Enter.</li>
+        </ul>
+        <div class="screenshot-placeholder">[ Screenshot: Login → Other user ]</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- APP IMPACT -->
+  <section>
+    <div class="section-head">
+      <div class="num">03 / IMPACT ON YOUR APPS</div>
+      <h2>What changes — and what doesn't</h2>
+      <p class="sub">Most of your apps will continue working with no action needed. A small number of systems IT doesn't control may still show your old username — this is expected.</p>
+    </div>
+
+    <div class="impact-grid">
+      <div class="impact-card good">
+        <h3>
+          <span class="impact-icon">✓</span>
+          Working as normal
+        </h3>
+        <ul>
+          <li><strong>Microsoft Teams</strong> — chats, calls, meetings</li>
+          <li><strong>Outlook</strong> — email and calendar</li>
+          <li><strong>SharePoint &amp; OneDrive</strong> — files and folders</li>
+          <li><strong>MyApps / SSO</strong> — most enterprise applications</li>
+          <li><strong>VLS</strong> — handled automatically via SCIM</li>
+          <li><strong>Quinyx</strong> — scheduling</li>
+          <li><strong>Workday</strong> — HR system</li>
+        </ul>
+      </div>
+
+      <div class="impact-card warn">
+        <h3>
+          <span class="impact-icon">!</span>
+          May still show your old username
+        </h3>
+        <ul>
+          <li><strong>SITH card systems</strong> — outside IT's control</li>
+          <li><strong>Third-party systems</strong> you sign into with a separate username and password</li>
+          <li><strong>Older bookmarks</strong> that include @ad.kry.se in the URL</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section>
+    <div class="section-head">
+      <div class="num">04 / FAQ</div>
+      <h2>Frequently asked questions</h2>
+    </div>
+
+    <div class="faq-list">
+
+      <details class="faq-item">
+        <summary>Do I need to change my password?</summary>
+        <div class="faq-body">No. Your password stays exactly the same. Only the part after the "@" symbol in your username changes.</div>
+      </details>
+
+      <details class="faq-item">
+        <summary>My email address changes — do I lose old emails?</summary>
+        <div class="faq-body">No. Your mailbox, calendar, contacts and all historic emails are kept. The old @ad.kry.se address is kept as a secondary address so emails sent to your old address will still arrive in the same inbox.</div>
+      </details>
+
+      <details class="faq-item">
+        <summary>What if I tap my existing profile instead of "Other user"?</summary>
+        <div class="faq-body">The login will fail. Sign out and start again — this time, click "Other user" at the bottom-left and enter your new username (firstname.lastname@kry.se).</div>
+      </details>
+
+      <details class="faq-item">
+        <summary>Do I need to do anything on my phone or the Authenticator app?</summary>
+        <div class="faq-body">In most cases, no. You may be prompted to re-authenticate once in Teams or Outlook mobile — sign in with your new username when prompted.</div>
+      </details>
+
+      <details class="faq-item">
+        <summary>Why is this change happening?</summary>
+        <div class="faq-body">It simplifies your login: one consistent address (@kry.se / @kry.no) that matches your email. It also tidies up our identity setup behind the scenes, reducing confusion when working with external partners and connecting new applications.</div>
+      </details>
+
+      <details class="faq-item">
+        <summary>Two of us share the same name — what happens?</summary>
+        <div class="faq-body">A small number of users have a name conflict in the new domain. IT will contact you personally before your migration to agree the new username. You don't need to do anything until contacted.</div>
+      </details>
+
+      <details class="faq-item">
+        <summary>An app still shows my old @ad.kry.se username — is something broken?</summary>
+        <div class="faq-body">Probably not. Some third-party systems (especially anything outside Microsoft and your SSO) keep their own copy of your username. These can't always be updated by IT. If the app still works, no action is needed. If it stops working, raise a Zendesk ticket and we'll investigate.</div>
+      </details>
+
+    </div>
+  </section>
+
+  <!-- SUPPORT -->
+  <section>
+    <div class="support-banner">
+      <div>
+        <h2>Need help? IT is here.</h2>
+        <p>If you can't log in, see something unexpected, or just want to double-check before the change — raise a ticket and the IT Service Desk will help you.</p>
+      </div>
+      <div class="support-cta">
+        <a href="https://kry.zendesk.com/" target="_blank" class="btn">→ Open a Zendesk ticket</a>
+        <a href="#" class="btn btn-outline">Ask in #it-support on Teams</a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div>UPN Migration · Project ITA-1779 · Last updated May 2026</div>
+    <div>Kry / Livi · IT</div>
+  </footer>
+
+</div>
+
+</body>
+</html>
