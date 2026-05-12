@@ -8,9 +8,8 @@
 <meta name="robots" content="noindex,nofollow" />
 <link rel="stylesheet" href="./assets/css/site.css" />
 <script>
-  // One-shot language picker: if a language was previously chosen, jump there.
-  // EXCEPT when ?picker=1 is in the URL — that's the "Change language" entry point.
-  // This runs before the picker UI renders to avoid flash.
+  // Language routing — runs before picker UI renders to avoid flash.
+  // Priority: ?picker=1 (explicit) → saved choice → default to Swedish.
   (function () {
     try {
       var params = new URLSearchParams(location.search);
@@ -18,7 +17,11 @@
       var lang = localStorage.getItem('upn-hub-lang');
       if (lang === 'en' || lang === 'sv' || lang === 'no') {
         location.replace('./' + lang + '/');
+        return;
       }
+      // First-time visitor — default to Swedish (majority audience).
+      // Norwegian + English users switch via the in-page language toggle.
+      location.replace('./sv/');
     } catch (e) { /* localStorage blocked — show picker */ }
   })();
 </script>
