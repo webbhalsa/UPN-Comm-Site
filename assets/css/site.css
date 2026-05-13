@@ -660,6 +660,16 @@ footer.site-footer a:hover {
   margin-bottom: 14px;
 }
 .guide-step h3 { margin-bottom: 12px; }
+.guide-step .step-note {
+  background: var(--bg-soft);
+  border-left: 3px solid var(--orange-500);
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 0.93rem;
+  color: var(--text);
+  margin: 0 0 16px;
+}
+.guide-step .step-note strong { color: var(--blue-900); }
 .guide-step ol {
   padding-left: 20px;
   color: var(--text);
